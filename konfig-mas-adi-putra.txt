@@ -3,11 +3,11 @@
 
 (http.referer contains "anonymousfox.co") or (http.request.uri contains "jm-ajax/upload-file") or (http.request.uri contains "vuln.ht") or (http.request.uri.path contains "/.") or (http.request.uri.path contains "/emergency.php") or (http.request.uri.path contains "/readme.txt") or (http.request.uri.path contains "/wp-json/trx_addons/") or (http.request.uri.path contains "/xmlrpc.php") or (http.request.uri.path contains "wp-config.php") or (http.request.uri.query contains "..%2F") or (http.request.uri.query contains "aam-media=") or (http.request.uri.query contains "action=_ning_upload_image") or (http.request.uri.query contains "author=") or (http.request.uri.query contains "HelloThinkCMF") or (http.request.uri.query contains "page=wysija_campaigns") or (http.request.uri.query contains "swp_url=https%3A%2F%2Fhastebin.com%2Fraw%2Fetonipusij") or (http.request.uri.query contains "wp_url=https://hastebin.com/raw/etonipusij") or (http.request.uri.query eq "up_auto_log=true") or (http.user_agent contains "http://ltx71.com/") or (http.user_agent contains "libwww-perl") or (http.user_agent contains "lwp-trivial") or (http.user_agent contains "LWP::Simple") or (http.user_agent contains "Python") or (http.user_agent contains "python-requests") or (http.user_agent contains "python-urllib") or (http.user_agent contains "WinHttp-Autoproxy") or (http.user_agent contains "DataForSeoBot/1.0" and http.user_agent contains "AhrefsBot/7.0" and http.user_agent contains "Python/3.7 aiohttp/3.7.2" and http.user_agent contains "GPTBot/1.0" and http.user_agent contains "SemrushBot/7~bl" and http.user_agent contains "MJ12bot/v1.4.8" and http.user_agent contains "CCBot/2.0" and http.user_agent contains "TinyTestBot")
 
-3. Then take actionâ€¦ > Block
-
+3. Then take action > Block
+4. Save and Deploy
 
 PAGE RULE KEDUA
-
+==================
 kasih nama "Satpam"
 
 kode ekspresi ini
@@ -18,5 +18,14 @@ actionnya : pilih Block
 
 
 Konfigurasi Dari : Mas Adi Putra
+
+=====================================
+Dari Google
+1. Pilih menu Security > WAF > Create Rule dan berinama "Block Negara"
+2. Edit expression dan Paste kode dibawah ini:
+(ip.geoip.country ne "ID" and ip.geoip.country in {"CA" "TT" "CN" "IE" "RU" "RO" "NL" "US" "GB"} and not ip.geoip.asnum in {32934 394699 15169 22577})
+
+
+
 
 ==================== PUDIN.MY.ID ==================================
