@@ -34,7 +34,14 @@ KONFIGURASIKU
 (http.request.uri.path contains "/xmlrpc.php" and http.request.uri.path contains "/wp-login.php" and http.request.uri.path contains "/wp-config.php" and http.request.uri.path contains "/.htaccess" and http.request.uri.path contains "/wp-cron.php")
 
 
+blokbootjahat
+1. Pilih menu Security > WAF > Create Rule dan berinama "Blokbootjahat"
+2. Edit expression dan Paste kode dibawah ini:
+(not ip.geoip.country in {"ID" "MY" "SG"} and not cf.client.bot)
 
+Then take action…
+Choose action
+: Managed challenge
 
 
 
