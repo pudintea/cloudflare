@@ -26,6 +26,16 @@ Dari Google
 (ip.geoip.country ne "ID" and ip.geoip.country in {"CA" "TT" "CN" "IE" "RU" "RO" "NL" "US" "GB"} and not ip.geoip.asnum in {32934 394699 15169 22577})
 
 
+KONFIGURASIKU
+===============
+
+1. Pilih menu Security > WAF > Create Rule dan berinama "Block Aksess WP"
+2. Edit expression dan Paste kode dibawah ini:
+(http.request.uri.path contains "/xmlrpc.php" and http.request.uri.path contains "/wp-login.php" and http.request.uri.path contains "/wp-config.php" and http.request.uri.path contains "/.htaccess" and http.request.uri.path contains "/wp-cron.php")
+
+
+
+
 
 
 ==================== PUDIN.MY.ID ==================================
