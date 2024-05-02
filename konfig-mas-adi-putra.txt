@@ -4,23 +4,27 @@
 (http.referer contains "anonymousfox.co") or (http.request.uri contains "jm-ajax/upload-file") or (http.request.uri contains "vuln.ht") or (http.request.uri.path contains "/.") or (http.request.uri.path contains "/emergency.php") or (http.request.uri.path contains "/readme.txt") or (http.request.uri.path contains "/wp-json/trx_addons/") or (http.request.uri.path contains "/xmlrpc.php") or (http.request.uri.path contains "wp-config.php") or (http.request.uri.query contains "..%2F") or (http.request.uri.query contains "aam-media=") or (http.request.uri.query contains "action=_ning_upload_image") or (http.request.uri.query contains "author=") or (http.request.uri.query contains "HelloThinkCMF") or (http.request.uri.query contains "page=wysija_campaigns") or (http.request.uri.query contains "swp_url=https%3A%2F%2Fhastebin.com%2Fraw%2Fetonipusij") or (http.request.uri.query contains "wp_url=https://hastebin.com/raw/etonipusij") or (http.request.uri.query eq "up_auto_log=true") or (http.user_agent contains "http://ltx71.com/") or (http.user_agent contains "libwww-perl") or (http.user_agent contains "lwp-trivial") or (http.user_agent contains "LWP::Simple") or (http.user_agent contains "Python") or (http.user_agent contains "python-requests") or (http.user_agent contains "python-urllib") or (http.user_agent contains "WinHttp-Autoproxy") or (http.user_agent contains "DataForSeoBot/1.0" and http.user_agent contains "AhrefsBot/7.0" and http.user_agent contains "Python/3.7 aiohttp/3.7.2" and http.user_agent contains "GPTBot/1.0" and http.user_agent contains "SemrushBot/7~bl" and http.user_agent contains "MJ12bot/v1.4.8" and http.user_agent contains "CCBot/2.0" and http.user_agent contains "TinyTestBot")
 
 3. Then take action > Block
-4. Save and Deploy
+4. Deploy
+
 
 PAGE RULE KEDUA
 ==================
-kasih nama "Satpam"
-
-kode ekspresi ini
-
+1. Pilih menu Security > WAF > Create Rule dan berinama "Satpam"
+2. Edit expression dan Paste kode dibawah ini:
 (http.request.uri contains "/wp-login.php" and not ip.geoip.country in {"ID"})
 
-actionnya : pilih Block
+Then take action…
+Choose action
+: Block
 
 
 Konfigurasi Dari : Mas Adi Putra
 
+
+
+
 =====================================
-Dari Google
+Nemu Dari Google
 1. Pilih menu Security > WAF > Create Rule dan berinama "Block Negara"
 2. Edit expression dan Paste kode dibawah ini:
 (ip.geoip.country ne "ID" and ip.geoip.country in {"CA" "TT" "CN" "IE" "RU" "RO" "NL" "US" "GB"} and not ip.geoip.asnum in {32934 394699 15169 22577})
@@ -34,7 +38,7 @@ KONFIGURASIKU
 (http.request.uri.path contains "/xmlrpc.php" and http.request.uri.path contains "/wp-login.php" and http.request.uri.path contains "/wp-config.php" and http.request.uri.path contains "/.htaccess" and http.request.uri.path contains "/wp-cron.php")
 
 
-blokbootjahat
+- Blokbootjahat
 1. Pilih menu Security > WAF > Create Rule dan berinama "Blokbootjahat"
 2. Edit expression dan Paste kode dibawah ini:
 (not ip.geoip.country in {"ID" "MY" "SG"} and not cf.client.bot)
@@ -42,6 +46,37 @@ blokbootjahat
 Then take action…
 Choose action
 : Managed challenge
+
+
+- Blok_boot
+1. Pilih menu Security > WAF > Create Rule dan berinama "Blok_boot"
+2. Edit expression dan Paste kode dibawah ini:
+(http.user_agent contains "smrush" and http.user_agent contains "ahref" and http.user_agent contains "dotbot" and http.user_agent contains "histat")
+
+Then take action…
+Choose action
+: Block
+
+
+- Block_xmlrpc_config_htaccess_dll
+1. Pilih menu Security > WAF > Create Rule dan berinama "Block_xmlrpc_config_htaccess_dll"
+2. Edit expression dan Paste kode dibawah ini:
+(http.request.uri.path contains "/xmlrpc.php" and http.request.uri.path contains "/wp-login.php" and http.request.uri.path contains "/wp-config.php" and http.request.uri.path contains "/.htaccess" and http.request.uri contains "/wp-json/wp/v2/posts")
+
+Then take action…
+Choose action
+: Block
+
+
+- Block_login_negara_tertentu
+1. Pilih menu Security > WAF > Create Rule dan berinama "Block_xmlrpc_config_htaccess_dll"
+2. Edit expression dan Paste kode dibawah ini:
+(http.request.uri contains "/masuk" and http.request.uri.path contains "/wp-admin" and not ip.geoip.country in {"ID"})
+
+Then take action…
+Choose action
+: Block
+
 
 
 
