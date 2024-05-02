@@ -61,7 +61,7 @@ Choose action
 - Block_xmlrpc_config_htaccess_dll
 1. Pilih menu Security > WAF > Create Rule dan berinama "Block_xmlrpc_config_htaccess_dll"
 2. Edit expression dan Paste kode dibawah ini:
-(http.request.uri.path contains "/xmlrpc.php" and http.request.uri.path contains "/wp-login.php" and http.request.uri.path contains "/wp-config.php" and http.request.uri.path contains "/.htaccess" and http.request.uri contains "/wp-json/wp/v2/posts")
+(http.request.uri.path contains "/xmlrpc.php" and http.request.uri.path contains "/wp-login.php" and http.request.uri.path contains "/wp-config.php" and http.request.uri.path contains "/.htaccess" and http.request.uri contains "/wp-json/wp/v2/posts" and http.request.uri.path contains "/wp-content/plugins/")
 
 Then take action…
 Choose action
