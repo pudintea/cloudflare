@@ -1,0 +1,202 @@
+KONFIGURASI WAJIB DI CLOUDFLARE
+1️. Speed → Optimization
+
+Aktifkan:
+✅ Auto Minify (HTML, CSS, JS)
+✅ Brotli
+❌ Rocket Loader (MATIKAN – sering konflik WP)
+
+2. Caching → Configuration
+Set:
+Caching Level: Standard
+Browser Cache TTL: 1 Month
+
+3. Caching → Cache Rules (PALING PENTING)
+Buat RULE BARU:
+
+🔹 Rule 1 — Kasih Nama : Cache halaman publik WordPress
+
+SETTING CACHE RULE YANG BENAR (WORDPRESS TANPA PLUGIN)
+
+When incoming requests match…
+Klik Custom filter expression
+Isi dengan TEPAT seperti ini:
+
+(http.request.method in {"GET" "HEAD"})
+and
+(not http.request.uri.path contains "/wp-admin")
+and
+(not http.request.uri.path contains "wp-login.php")
+
+📌 Artinya:
+Hanya cache halaman publik
+Admin & login dikecualikan
+
+
+BAGIAN 1 — Cache eligibility (WAJIB)
+👉 PILIH:
+✅ Eligible for cache
+
+📌 Artinya:
+Cloudflare boleh cache response dari WordPress
+(TANPA ini, TTFB tidak turun)
+
+BAGIAN 2 — Edge TTL (PALING PENTING)
+👉 PILIH:
+Ignore cache-control header and use this TTL
+TTL yang disarankan:
+3600 seconds (1 hour)
+
+*) Terkahir update hanya bisa 2 hours, tidak bisa 1 hours, pake 2 hours aja.
+
+📌 Kenapa?
+WordPress tidak mengirim cache-control HTML yang kuat
+Kalau pakai “Use cache-control header” → sering TIDAK KE-CACHE
+Mode ini memaksa Cloudflare cache HTML
+✅ Aman untuk blog / company / sekolah
+⚠️ Untuk toko online → JANGAN cache cart & account
+
+
+BAGIAN 3 — Status Code TTL (BIARKAN KOSONG)
+👉 JANGAN diisi
+Cloudflare default sudah cukup.
+
+BAGIAN 4 — Browser TTL
+👉 PILIH:
+Respect origin TTL
+
+📌 Kenapa?
+Browser cache sudah diatur dari .htaccess
+Aman untuk update konten
+Tidak bikin konten basi
+
+
+KONFIGURASI TAMBAHAN DI .htaccess (WAJIB)
+<IfModule mod_headers.c>
+  Header set Cache-Control "public, max-age=3600"
+</IfModule>
+
+CARA CEK BERHASIL ATAU TIDAK
+Cek header via browser / GTmetrix:
+
+Harus muncul:
+cf-cache-status: HIT
+
+Jika masih:
+cf-cache-status: MISS
+➡️ refresh 2–3 kali
+
+
+================================== WP-CONFIG DAN HTACCESS YANG SAYA GUNAKAN ===========================
+
+==============
+
+// Enable WordPress internal cache
+define('WP_CACHE', true);
+
+// Security
+define('DISALLOW_FILE_EDIT', true);
+
+// Performance
+//define('WP_POST_REVISIONS', 3);
+define('AUTOSAVE_INTERVAL', 300);
+define('EMPTY_TRASH_DAYS', 7);
+
+// Debug OFF (production)
+define('WP_DEBUG', false);
+define('WP_DEBUG_LOG', false);
+define('WP_DEBUG_DISPLAY', false);
+
+// SSL
+define('FORCE_SSL_ADMIN', true);
+
+=============================================================================
+
+# ===============================
+# BASIC SECURITY
+# ===============================
+Options -Indexes
+
+<Files wp-config.php>
+  Order Allow,Deny
+  Deny from all
+</Files>
+
+<FilesMatch "(^\.|readme\.html|license\.txt)">
+  Order Allow,Deny
+  Deny from all
+</FilesMatch>
+
+# Block PHP execution in uploads
+<IfModule mod_php.c>
+  <Directory wp-content/uploads>
+    <FilesMatch "\.php$">
+      Order Deny,Allow
+      Deny from all
+    </FilesMatch>
+  </Directory>
+</IfModule>
+
+
+# ===============================
+# GZIP COMPRESSION
+# ===============================
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+  AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+</IfModule>
+
+
+# ===============================
+# BROWSER & HTTP CACHE (CLOUDFLARE FRIENDLY)
+# ===============================
+
+# Cache HTML (WordPress pages)
+<IfModule mod_headers.c>
+  Header set Cache-Control "public, max-age=3600"
+</IfModule>
+
+# Cache static files (long TTL)
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+
+  ExpiresByType image/jpg "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(css|js|jpg|jpeg|png|gif|ico)$">
+    Header set Cache-Control "public, max-age=31536000"
+  </FilesMatch>
+</IfModule>
+
+# ===============================
+# XMLRPC (disable if not used)
+# ===============================
+<Files xmlrpc.php>
+  Order Allow,Deny
+  Deny from all
+</Files>
+
+# ===============================
+# WORDPRESS DEFAULT RULE
+# ===============================
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+# END WordPress
+
+
+
+=============== PUDIN SAEPUDIN : italazhar.com
