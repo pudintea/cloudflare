@@ -27,6 +27,8 @@ and
 (not http.request.uri.path contains "/wp-admin")
 and
 (not http.request.uri.path contains "wp-login.php")
+and
+(not http.request.uri.path contains "/bo")
 
 📌 Artinya:
 Hanya cache halaman publik
